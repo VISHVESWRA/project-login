@@ -55,7 +55,7 @@ function Login() {
 
   return (
     <>
-      <div className="min-h-screen flex">
+      <div className="min-h-screen min-w-screen flex">
         {/* Left Side */}
         <div
           className="hidden md:flex md:flex-col gap-2 w-1/2 items-center justify-center
@@ -71,7 +71,7 @@ function Login() {
           <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-sm">
             <h2
               className="text-2xl font-semibold text-center mb-1
-               bg-linear-to-r from-blue-600 to-purple-600
+               bg-linear-to-r from-blue-600 via-purple-600 to-pink-500
                bg-clip-text text-transparent"
             >
               Login

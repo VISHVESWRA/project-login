@@ -7,9 +7,7 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <div>
-          <Toaster position="top-right" reverseOrder={true} />
-        </div>
+        <Toaster position="top-right" reverseOrder={true} />
         <AppRoutes />
       </BrowserRouter>
     </>
