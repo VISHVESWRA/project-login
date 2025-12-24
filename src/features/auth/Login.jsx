@@ -63,11 +63,7 @@ function Login() {
         >
           <h1 className="text-white text-3xl font-bold">Welcome Back</h1>
 
-          <img
-            src="/src/assets/neinus.jpg"
-            alt="Login"
-            className="w-3/4 drop-shadow-xl"
-          />
+          <img src="/neinus.jpg" alt="Login" className="w-3/4 drop-shadow-xl" />
         </div>
 
         {/* Right Side */}
