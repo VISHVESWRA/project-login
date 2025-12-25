@@ -4,7 +4,7 @@ import Login from "../features/auth/Login.jsx";
 import Register from "../features/auth/Register.jsx";
 import ForgotPassword from "../features/auth/ForgotPassword.jsx";
 import ResetPassword from "../features/auth/ResetPassword.jsx";
-import Loans from "../features/sidebar/list/Loans.jsx";
+import Loans from "../features/sidebar/list/loans/Loans.jsx";
 import Policies from "../features/sidebar/list/Policies.jsx";
 import Chit from "../features/sidebar/list/chit/Chit.jsx";
 import Home from "../features/sidebar/list/Home.jsx";
@@ -12,6 +12,7 @@ import AuthLayout from "../layouts/AuthLayouts.jsx";
 import DashboardLayout from "../layouts/DashboardLayouts.jsx";
 import ChitAct from "../features/sidebar/list/chit/ChitAct.jsx";
 import ChitServices from "../features/sidebar/list/chit/ChitServices.jsx";
+import PersonalLoan from "../features/sidebar/list/loans/PersonalLoan.jsx";
 
 function AppRoutes() {
   return (
@@ -32,6 +33,7 @@ function AppRoutes() {
         <Route path="chit" element={<Chit />} />
         <Route path="chit-act" element={<ChitAct />} />
         <Route path="chit-services" element={<ChitServices />} />
+        <Route path="personal-loan" element={<PersonalLoan />} />
       </Route>
     </Routes>
   );
