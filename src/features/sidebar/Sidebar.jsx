@@ -34,19 +34,32 @@ function Sidebar() {
 
       <nav className="space-y-2">
         {/* Home */}
-        <NavLink to="/dashboard" end className={linkClass}>
+        <NavLink
+          to="/dashboard"
+          end
+          className={linkClass}
+          onClick={() => setChitOpen(false)}
+        >
           <LayoutDashboard size={18} />
           Home
         </NavLink>
 
         {/* Loans */}
-        <NavLink to="/dashboard/loans" className={linkClass}>
+        <NavLink
+          to="/dashboard/loans"
+          className={linkClass}
+          onClick={() => setChitOpen(false)}
+        >
           <Banknote size={18} />
           Loans
         </NavLink>
 
         {/* Policies */}
-        <NavLink to="/dashboard/policies" className={linkClass}>
+        <NavLink
+          to="/dashboard/policies"
+          className={linkClass}
+          onClick={() => setChitOpen(false)}
+        >
           <ShieldCheck size={18} />
           Policies
         </NavLink>
