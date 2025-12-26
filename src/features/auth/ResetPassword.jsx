@@ -1,5 +1,5 @@
 import { useForm, Controller } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 
@@ -77,6 +77,13 @@ function ResetPassword() {
           >
             Reset Password
           </Button>
+
+          <p className="text-center text-sm mt-4">
+            Already have an account?{" "}
+            <Link to="/" className="text-blue-600 hover:underline">
+              Sign in
+            </Link>
+          </p>
         </form>
       </div>
     </div>

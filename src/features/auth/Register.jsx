@@ -1,22 +1,39 @@
-import { useForm, Controller } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useForm, Controller, useWatch } from "react-hook-form";
+import { useNavigate, Link } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import { useState } from "react";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import toasts from "react-hot-toast";
 
 function Register() {
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const {
     control,
     handleSubmit,
+    reset,
+    watch,
     formState: { errors },
   } = useForm();
+  const password = useWatch({ control, name: "password" });
 
   const onSubmit = (data) => {
-    // Save user to localStorage
-    localStorage.setItem("user", JSON.stringify(data));
+    const existingUser = JSON.parse(localStorage.getItem("user"));
 
-    alert("Registration successful!");
+    if (existingUser?.email === data.email) {
+      toasts.error("User already exists. Please login.");
+      return;
+    }
+
+    localStorage.setItem("user", JSON.stringify(data));
+    toasts.success("Registration successful! Please login.");
+    reset();
     navigate("/");
   };
 
@@ -46,7 +63,8 @@ function Register() {
                 {...field}
                 label="Email"
                 fullWidth
-                margin="normal"
+                size="small"
+                margin="dense"
                 error={!!errors.email}
                 helperText={errors.email?.message}
               />
@@ -69,11 +87,64 @@ function Register() {
               <TextField
                 {...field}
                 label="Password"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 fullWidth
-                margin="normal"
+                size="small"
+                margin="dense"
                 error={!!errors.password}
                 helperText={errors.password?.message}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={() => setShowPassword(!showPassword)}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            )}
+          />
+
+          <Controller
+            name="confirmPassword"
+            control={control}
+            defaultValue=""
+            rules={{
+              validate: (value) =>
+                value === password || "Passwords do not match",
+            }}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label="Confirm Password"
+                type={showConfirmPassword ? "text" : "password"}
+                fullWidth
+                size="small"
+                margin="dense"
+                error={!!errors.confirmPassword}
+                helperText={errors.confirmPassword?.message}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={() =>
+                          setShowConfirmPassword(!showConfirmPassword)
+                        }
+                        edge="end"
+                      >
+                        {showConfirmPassword ? (
+                          <VisibilityOff />
+                        ) : (
+                          <Visibility />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
             )}
           />
@@ -90,6 +161,13 @@ function Register() {
           >
             Register
           </Button>
+
+          <p className="text-center text-sm mt-4">
+            Already have an account?{" "}
+            <Link to="/" className="text-blue-600 hover:underline">
+              Sign in
+            </Link>
+          </p>
         </form>
       </div>
     </div>

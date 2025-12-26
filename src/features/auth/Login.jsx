@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import toasts from "react-hot-toast";
@@ -16,19 +16,15 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  const DUMMY_USER = {
-    email: "admin@gmail.com",
-    password: "admin123",
-  };
-
   const navigate = useNavigate();
 
   const {
     control,
     handleSubmit,
-    formState: { errors },
-  } = useForm();
+    formState: { errors, isValid },
+  } = useForm({
+    mode: "onChange",
+  });
 
   const onSubmit = (data) => {
     setLoading(true);
@@ -36,22 +32,41 @@ function Login() {
     setTimeout(() => {
       const storedUser = JSON.parse(localStorage.getItem("user"));
 
-      if (
-        storedUser &&
-        data.email === storedUser.email &&
-        data.password === storedUser.password
-      ) {
-        localStorage.setItem("isLoggedIn", "true");
-        navigate("/dashboard");
-      } else if (data.email !== DUMMY_USER.email) {
+      // 1️⃣ No user registered
+      if (!storedUser) {
         toasts.error("User not found. Please register.");
-      } else if (data.password !== DUMMY_USER.password) {
-        toasts.error("Invalid password.");
+        setLoading(false);
+        return;
       }
+
+      // 2️⃣ Email mismatch
+      if (data.email !== storedUser.email) {
+        toasts.error("User not found. Please register.");
+        setLoading(false);
+        return;
+      }
+
+      // 3️⃣ Password mismatch
+      if (data.password !== storedUser.password) {
+        toasts.error("Invalid password.");
+        setLoading(false);
+        return;
+      }
+
+      // 4️⃣ Success
+      localStorage.setItem("isLoggedIn", "true");
+      toasts.success("Login successful!");
+      navigate("/dashboard");
 
       setLoading(false);
     }, 1500);
   };
+
+  useEffect(() => {
+    if (localStorage.getItem("isLoggedIn") === "true") {
+      navigate("/dashboard");
+    }
+  }, [navigate]);
 
   return (
     <>
@@ -59,12 +74,21 @@ function Login() {
         {/* Left Side */}
         <div
           className="hidden md:flex md:flex-col gap-2 w-1/2 items-center justify-center
-                      bg-linear-to-br from-blue-600 via-purple-600 to-pink-500"
+                      bg-linear-to-br from-blue-700 via-purple-600 to-pink-600"
         >
-          <h1 className="text-white text-3xl font-bold">Welcome Back</h1>
-
-          <img src="/neinus.jpg" alt="Login" className="w-3/4 drop-shadow-xl" />
+          <h1 className="text-white text-3xl font-bold">PMS</h1>
         </div>
+
+        {/* <div
+          className="relative hidden md:flex w-1/2 bg-cover bg-center"
+          style={{ backgroundImage: "url('/login-bg.png')" }}
+        >
+          <div className="absolute inset-0 bg-black/50"></div>
+
+          <h1 className="relative flex justify-center w-full z-10 text-white text-4xl font-bold">
+            PMS
+          </h1>
+        </div> */}
 
         {/* Right Side */}
         <div className="w-full md:w-1/2 flex items-center justify-center bg-gray-200">
@@ -74,10 +98,10 @@ function Login() {
                bg-linear-to-r from-blue-600 via-purple-600 to-pink-500
                bg-clip-text text-transparent"
             >
-              Login
+              PMS
             </h2>
-            <p className="text-sm text-gray-500 text-center mb-6">
-              Please enter your credentials
+            <p className="text-lg text-gray-500 text-center mb-6">
+              Login to your account
             </p>
 
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -98,6 +122,7 @@ function Login() {
                     {...field}
                     label="Email"
                     fullWidth
+                    size="small"
                     margin="normal"
                     error={!!errors.email}
                     helperText={errors.email?.message}
@@ -123,6 +148,7 @@ function Login() {
                     label="Password"
                     type={showPassword ? "text" : "password"}
                     fullWidth
+                    size="small"
                     margin="normal"
                     error={!!errors.password}
                     helperText={errors.password?.message}

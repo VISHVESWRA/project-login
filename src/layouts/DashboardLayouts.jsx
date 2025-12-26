@@ -2,9 +2,15 @@ import { Outlet } from "react-router-dom";
 import { useState } from "react";
 import Sidebar from "../features/sidebar/Sidebar";
 import { Menu } from "lucide-react";
+import { Navigate } from "react-router-dom";
 
 function DashboardLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const isLoggedIn = localStorage.getItem("isLoggedIn");
+
+  if (!isLoggedIn) {
+    return <Navigate to="/" />;
+  }
 
   return (
     <div className="flex min-h-screen bg-gray-100">

@@ -1,7 +1,8 @@
 import { useForm, Controller } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import toasts from "react-hot-toast";
 
 function ForgotPassword() {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ function ForgotPassword() {
     const storedUser = JSON.parse(localStorage.getItem("user"));
 
     if (!storedUser || storedUser.email !== data.email) {
-      alert("Email not registered");
+      toasts.error("Email not registered");
       return;
     }
 
@@ -71,6 +72,13 @@ function ForgotPassword() {
           >
             Continue
           </Button>
+
+          <p className="text-center text-sm mt-4">
+            Already have an account?{" "}
+            <Link to="/" className="text-blue-600 hover:underline">
+              Sign in
+            </Link>
+          </p>
         </form>
       </div>
     </div>
